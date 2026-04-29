@@ -2,7 +2,6 @@ name: "Rebuild Armbian"
 author: "https://github.com/armbian"
 description: "Build Armbian Linux"
 inputs:
-
   armbian_token:
     description: "GitHub installation access token"
     required: true
@@ -41,6 +40,11 @@ inputs:
     description: "Set different version"
     required: false
     default: ""
+
+  armbian_version_mode:
+    description: "Versioning mode: next-patch (default) or exact"
+    required: false
+    default: "next-patch"
 
   armbian_board:
     description: "Select hardware platform"
@@ -91,7 +95,6 @@ runs:
   using: "composite"
 
   steps:
-
     - name: Free Github Runner
       if: ${{ inputs.armbian_runner_clean != '' }}
       uses: descriptinc/free-disk-space@main
@@ -138,6 +141,14 @@ runs:
 
         # Resolve base version (prefer workflow input if provided)
         BASE_VERSION="${{ inputs.armbian_version }}"
+
+        if [ -n "$BASE_VERSION" ] && [ "${{ inputs.armbian_version_mode }}" = "exact" ]; then
+          {
+            echo "ARMBIAN_VERSION=${BASE_VERSION}"
+          } >> "$GITHUB_ENV"
+          exit 0
+        fi
+
         if [ -z "$BASE_VERSION" ]; then
           BASE_VERSION="$(jq -r '.version' os/stable.json)"
         fi
@@ -237,4 +248,3 @@ runs:
 branding:
   icon: "check"
   color: "red"
-
