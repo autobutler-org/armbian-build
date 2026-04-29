@@ -220,7 +220,7 @@ runs:
         build/output/images/*.img*.xz
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: armbian-${{ inputs.armbian_board }}-${{ inputs.armbian_image_version || env.ARMBIAN_VERSION }}
         path: "${{ inputs.armbian_artifacts }}*"
