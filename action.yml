@@ -2,10 +2,6 @@ name: "Rebuild Armbian"
 author: "https://github.com/armbian"
 description: "Build Armbian Linux"
 inputs:
-  armbian_token:
-    description: "GitHub installation access token"
-    required: true
-
   armbian_runner_clean:
     description: "Make some space on GH runners"
     required: false
@@ -78,21 +74,6 @@ inputs:
 
   armbian_pgp_password:
     description: "Armbian PGP password"
-    required: false
-    default: ""
-
-  armbian_release_title:
-    description: "Armbian image"
-    required: false
-    default: "Armbian image"
-
-  armbian_release_body:
-    description: "Armbian images"
-    required: false
-    default: "Build with [Armbian tools](https://github.com/armbian/build)"
-
-  armbian_release_tag:
-    description: "Armbian release tag"
     required: false
     default: ""
 
@@ -238,18 +219,12 @@ runs:
         gpg --passphrase-fd 0 --armor --detach-sign --pinentry-mode loopback --batch --yes \
         build/output/images/*.img*.xz
 
-    - uses: ncipollo/release-action@v1
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
       with:
-        tag: ${{ inputs.armbian_release_tag != '' && inputs.armbian_release_tag || env.ARMBIAN_VERSION }}
-        name: "${{ inputs.armbian_release_title }}"
-        artifacts: "${{ inputs.armbian_artifacts }}*"
-        allowUpdates: true
-        removeArtifacts: false
-        replacesArtifacts: true
-        makeLatest: true
-        token: "${{ inputs.armbian_token }}"
-        body: |
-          ${{ inputs.armbian_release_body }}
+        name: armbian-${{ inputs.armbian_board }}-${{ inputs.armbian_image_version || env.ARMBIAN_VERSION }}
+        path: "${{ inputs.armbian_artifacts }}*"
+        if-no-files-found: error
 
 branding:
   icon: "check"
