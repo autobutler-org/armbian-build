@@ -41,6 +41,11 @@ inputs:
     required: false
     default: ""
 
+  armbian_image_version:
+    description: "Set image/OS visible version string (does not affect package reversioning)"
+    required: false
+    default: ""
+
   armbian_version_mode:
     description: "Versioning mode: next-patch (default) or exact"
     required: false
@@ -210,6 +215,7 @@ runs:
         # execute build command
         ./compile.sh "${{ inputs.armbian_target }}" \
         REVISION="${{ env.ARMBIAN_VERSION }}" \
+        IMAGE_VERSION="${{ inputs.armbian_image_version }}" \
         BOARD="${{ inputs.armbian_board }}" \
         BRANCH="${{ inputs.armbian_kernel_branch }}" \
         RELEASE="${{ inputs.armbian_release }}" \
