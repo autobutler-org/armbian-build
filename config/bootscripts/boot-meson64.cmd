@@ -8,7 +8,11 @@ setenv kernel_addr_r "0x34000000"
 setenv fdt_addr_r "0x4080000"
 setenv overlay_error "false"
 # default values
-setenv rootdev "/dev/mmcblk1p1"
+# Use the filesystem label set by the Armbian build system on the root partition.
+# This is stable regardless of eMMC presence (no mmcblk numbering dependency)
+# and does not require armbianEnv.txt to load. armbianEnv.txt may still override
+# this with a UUID= value if it loads correctly.
+setenv rootdev "LABEL=armbi_root"
 setenv verbosity "1"
 setenv console "both"
 setenv bootlogo "false"
