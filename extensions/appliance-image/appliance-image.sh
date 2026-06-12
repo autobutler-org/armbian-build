@@ -197,6 +197,7 @@ function pre_customize_image__appliance_image_copy_payload() {
 		ExecStart=${APPLIANCE_IMAGE_EXEC_START}
 		Restart=${APPLIANCE_IMAGE_SERVICE_RESTART}
 		RestartSec=2
+		Environment="GIN_MODE=release"
 	APPLIANCE_IMAGE_SYSTEMD_SERVICE
 
 	for systemd_env in "${APPLIANCE_IMAGE_SYSTEMD_ENVIRONMENT_LIST[@]}"; do
