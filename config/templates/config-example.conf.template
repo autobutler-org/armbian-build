@@ -37,5 +37,5 @@ NAMESERVER=$(grep nameserver /etc/resolv.conf|awk '{ print $2 }'| head -n 1)
 
 # Quark appliance image example
 # ENABLE_EXTENSIONS="quark-image"
-# AUTOBUTLER_IMAGE_LOGIN_PASSWORD="change-me"
-# AUTOBUTLER_IMAGE_ENABLE_SSH="no"
+# QUARK_IMAGE_LOGIN_PASSWORD="change-me"
+# QUARK_IMAGE_ENABLE_SSH="no"
