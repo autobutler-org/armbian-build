@@ -1,10 +1,10 @@
 # Quark Image Extension
 
-This extension provisions an Quark appliance image from the latest GitHub release.
+This extension provisions a Quark appliance image from a GitHub release.
 
 It builds on `appliance-image` and preconfigures:
 
-- latest `quark_Linux_arm64.tar.gz` from GitHub Releases
+- `quark_Linux_arm64.tar.gz` from the release tagged `IMAGE_VERSION`, or the latest release when `IMAGE_VERSION` is unset
 - install path `/usr/local/bin/quark`
 - systemd service `quark.service`
 - service account and login account `quark`

@@ -8,7 +8,13 @@ function extension_prepare_config__400_quark_image_defaults() {
 	: "${QUARK_IMAGE_LOGIN_USER:=quark}"
 	: "${QUARK_IMAGE_HOSTNAME:=quark}"
 	: "${QUARK_IMAGE_PORT:=80}"
-	: "${QUARK_IMAGE_BINARY_URL:=https://github.com/autobutler-org/quark/releases/latest/download/quark_Linux_arm64.tar.gz}"
+	# A tagged build embeds that tag's binary: the Quark release workflow passes
+	# the tag as IMAGE_VERSION. Without one, the latest release.
+	if [[ -n "${IMAGE_VERSION}" ]]; then
+		: "${QUARK_IMAGE_BINARY_URL:=https://github.com/autobutler-org/quark/releases/download/${IMAGE_VERSION}/quark_Linux_arm64.tar.gz}"
+	else
+		: "${QUARK_IMAGE_BINARY_URL:=https://github.com/autobutler-org/quark/releases/latest/download/quark_Linux_arm64.tar.gz}"
+	fi
 
 	declare -g APPLIANCE_IMAGE_SERVICE_NAME="quark"
 	declare -g APPLIANCE_IMAGE_SERVICE_DESCRIPTION="Quark Service"
