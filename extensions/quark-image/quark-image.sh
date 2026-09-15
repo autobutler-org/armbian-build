@@ -7,7 +7,6 @@ function extension_prepare_config__400_quark_image_defaults() {
 	: "${QUARK_IMAGE_LOGIN_PASSWORD:=}"
 	: "${QUARK_IMAGE_LOGIN_USER:=quark}"
 	: "${QUARK_IMAGE_HOSTNAME:=quark}"
-	: "${QUARK_IMAGE_PORT:=80}"
 	# A tagged build embeds that tag's binary: the Quark release workflow passes
 	# the tag as IMAGE_VERSION. Without one, the latest release.
 	if [[ -n "${IMAGE_VERSION}" ]]; then
@@ -33,13 +32,16 @@ function extension_prepare_config__400_quark_image_defaults() {
 	declare -g APPLIANCE_IMAGE_DATA_DIR="/var/lib/quark/data"
 	# dcraw and exiftool: photoutil reads a RAW photo's embedded preview with them.
 	declare -g APPLIANCE_IMAGE_PACKAGES="avahi-daemon dcraw ffmpeg libimage-exiftool-perl ufw udisks2"
-	declare -g APPLIANCE_IMAGE_SYSTEMD_ENVIRONMENT="PORT=${QUARK_IMAGE_PORT} GIN_MODE=release"
+	# Matches the unit `quark install` writes. Without QUARK_INSECURE, `quark
+	# serve` serves TLS on HTTPS_PORT only; nothing listens on PORT.
+	declare -g APPLIANCE_IMAGE_SYSTEMD_ENVIRONMENT="PORT=80 HTTPS_PORT=443 GIN_MODE=release"
 	declare -g APPLIANCE_IMAGE_SYSTEMD_STANDARD_OUTPUT="append:/var/log/quark.app"
 	declare -g APPLIANCE_IMAGE_SYSTEMD_STANDARD_ERROR="append:/var/log/quark.err"
 	declare -g APPLIANCE_IMAGE_SYSTEMD_CAPABILITIES="CAP_NET_BIND_SERVICE"
 	declare -g APPLIANCE_IMAGE_AVAHI_SERVICE_NAME="Quark on %h"
-	declare -g APPLIANCE_IMAGE_AVAHI_SERVICE_PORT="${QUARK_IMAGE_PORT}"
-	declare -g APPLIANCE_IMAGE_OPEN_PORTS="${QUARK_IMAGE_PORT}/tcp"
+	declare -g APPLIANCE_IMAGE_AVAHI_SERVICE_TYPE="_https._tcp"
+	declare -g APPLIANCE_IMAGE_AVAHI_SERVICE_PORT="443"
+	declare -g APPLIANCE_IMAGE_OPEN_PORTS="443/tcp"
 	declare -g APPLIANCE_IMAGE_ENABLE_SSH="${QUARK_IMAGE_ENABLE_SSH}"
 	declare -g APPLIANCE_IMAGE_SUDOERS_FILENAME="quark"
 	declare -g APPLIANCE_IMAGE_SUDOERS_CONTENT="quark ALL=(root) NOPASSWD: /bin/mount * /var/lib/quark/data/mounts/*, /bin/umount /var/lib/quark/data/mounts/*"
