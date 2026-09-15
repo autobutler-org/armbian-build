@@ -31,7 +31,6 @@ function extension_prepare_config__400_quark_image_defaults() {
 	declare -g APPLIANCE_IMAGE_EXEC_START="/usr/local/bin/quark serve"
 	declare -g APPLIANCE_IMAGE_WORKING_DIR="/var/lib/quark"
 	declare -g APPLIANCE_IMAGE_DATA_DIR="/var/lib/quark/data"
-	declare -g APPLIANCE_IMAGE_EXTRA_DIRECTORIES="/var/lib/quark/mounts"
 	# dcraw and exiftool: photoutil reads a RAW photo's embedded preview with them.
 	declare -g APPLIANCE_IMAGE_PACKAGES="avahi-daemon dcraw ffmpeg libimage-exiftool-perl ufw udisks2"
 	declare -g APPLIANCE_IMAGE_SYSTEMD_ENVIRONMENT="PORT=${QUARK_IMAGE_PORT} GIN_MODE=release"
@@ -43,5 +42,5 @@ function extension_prepare_config__400_quark_image_defaults() {
 	declare -g APPLIANCE_IMAGE_OPEN_PORTS="${QUARK_IMAGE_PORT}/tcp"
 	declare -g APPLIANCE_IMAGE_ENABLE_SSH="${QUARK_IMAGE_ENABLE_SSH}"
 	declare -g APPLIANCE_IMAGE_SUDOERS_FILENAME="quark"
-	declare -g APPLIANCE_IMAGE_SUDOERS_CONTENT="quark ALL=(root) NOPASSWD: /bin/mount * /var/lib/quark/mounts/*, /bin/umount /var/lib/quark/mounts/*"
+	declare -g APPLIANCE_IMAGE_SUDOERS_CONTENT="quark ALL=(root) NOPASSWD: /bin/mount * /var/lib/quark/data/mounts/*, /bin/umount /var/lib/quark/data/mounts/*"
 }

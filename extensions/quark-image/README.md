@@ -9,7 +9,6 @@ It builds on `appliance-image` and preconfigures:
 - systemd service `quark.service`
 - service account and login account `quark`
 - data directory `/var/lib/quark/data`
-- mounts directory `/var/lib/quark/mounts`
 - HTTP on port 80
 - avahi service for `quark.local`
 - `ffmpeg` and `ffprobe`, which Quark shells out to for video thumbnails and transcoding
