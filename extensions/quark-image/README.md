@@ -9,8 +9,8 @@ It builds on `appliance-image` and preconfigures:
 - systemd service `quark.service`
 - service account and login account `quark`
 - data directory `/var/lib/quark/data`
-- HTTP on port 80
-- avahi service for `quark.local`
+- HTTPS on port 443, the only port the firewall opens
+- avahi service `_https._tcp` for `quark.local`
 - `ffmpeg` and `ffprobe`, which Quark shells out to for video thumbnails and transcoding
 - `dcraw` and `exiftool`, which Quark uses to read RAW photo previews
 - sudoers rule needed for managed mount operations
@@ -26,5 +26,4 @@ Optional settings:
 - `QUARK_IMAGE_LOGIN_PASSWORD`
 - `QUARK_IMAGE_LOGIN_USER`
 - `QUARK_IMAGE_HOSTNAME`
-- `QUARK_IMAGE_PORT`
 - `QUARK_IMAGE_ENABLE_SSH=yes`
