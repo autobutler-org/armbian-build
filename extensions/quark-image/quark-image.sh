@@ -16,7 +16,6 @@ function extension_prepare_config__400_quark_image_defaults() {
 	fi
 
 	declare -g APPLIANCE_IMAGE_SERVICE_NAME="quark"
-	declare -g APPLIANCE_IMAGE_SERVICE_DESCRIPTION="Quark Service"
 	declare -g APPLIANCE_IMAGE_HOSTNAME="${QUARK_IMAGE_HOSTNAME}"
 	declare -g APPLIANCE_IMAGE_SERVICE_USER="quark"
 	declare -g APPLIANCE_IMAGE_SERVICE_GROUP="quark"
@@ -26,23 +25,27 @@ function extension_prepare_config__400_quark_image_defaults() {
 	declare -g APPLIANCE_IMAGE_BINARY_URL="${QUARK_IMAGE_BINARY_URL}"
 	declare -g APPLIANCE_IMAGE_BINARY_URL_EXTRACT_MODE="targz"
 	declare -g APPLIANCE_IMAGE_BINARY_ARCHIVE_MEMBER="quark"
+	# Where the download lands; `quark install` moves it into /opt/quark/bin and
+	# leaves this path as a symlink.
 	declare -g APPLIANCE_IMAGE_BINARY_INSTALL_PATH="/usr/local/bin/quark"
-	declare -g APPLIANCE_IMAGE_EXEC_START="/usr/local/bin/quark serve"
 	declare -g APPLIANCE_IMAGE_WORKING_DIR="/var/lib/quark"
 	declare -g APPLIANCE_IMAGE_DATA_DIR="/var/lib/quark/data"
 	# dcraw and exiftool: photoutil reads a RAW photo's embedded preview with them.
 	declare -g APPLIANCE_IMAGE_PACKAGES="avahi-daemon dcraw ffmpeg libimage-exiftool-perl ufw udisks2"
-	# Matches the unit `quark install` writes. Without QUARK_INSECURE, `quark
-	# serve` serves TLS on HTTPS_PORT only; nothing listens on PORT.
-	declare -g APPLIANCE_IMAGE_SYSTEMD_ENVIRONMENT="PORT=80 HTTPS_PORT=443 GIN_MODE=release"
-	declare -g APPLIANCE_IMAGE_SYSTEMD_STANDARD_OUTPUT="append:/var/log/quark.app"
-	declare -g APPLIANCE_IMAGE_SYSTEMD_STANDARD_ERROR="append:/var/log/quark.err"
-	declare -g APPLIANCE_IMAGE_SYSTEMD_CAPABILITIES="CAP_NET_BIND_SERVICE"
+	# The unit `quark install` writes has no QUARK_INSECURE, so `quark serve`
+	# serves TLS on HTTPS_PORT=443 and nothing listens on 80.
 	declare -g APPLIANCE_IMAGE_AVAHI_SERVICE_NAME="Quark on %h"
 	declare -g APPLIANCE_IMAGE_AVAHI_SERVICE_TYPE="_https._tcp"
 	declare -g APPLIANCE_IMAGE_AVAHI_SERVICE_PORT="443"
 	declare -g APPLIANCE_IMAGE_OPEN_PORTS="443/tcp"
 	declare -g APPLIANCE_IMAGE_ENABLE_SSH="${QUARK_IMAGE_ENABLE_SSH}"
-	declare -g APPLIANCE_IMAGE_SUDOERS_FILENAME="quark"
-	declare -g APPLIANCE_IMAGE_SUDOERS_CONTENT="quark ALL=(root) NOPASSWD: /bin/mount * /var/lib/quark/data/mounts/*, /bin/umount /var/lib/quark/data/mounts/*"
+}
+
+# The binary layout, sudoers rule and systemd unit come from `quark install`
+# itself, so the image cannot drift from a host install. It runs after
+# appliance-image has created the accounts, and its unit replaces the one
+# appliance-image wrote at the same path.
+function post_customize_image__600_quark_image_install() {
+	display_alert "Extension: ${EXTENSION}" "running quark install in the image" "info"
+	chroot_sdcard "/usr/local/bin/quark install"
 }

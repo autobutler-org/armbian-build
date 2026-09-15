@@ -157,7 +157,9 @@ function pre_customize_image__appliance_image_copy_payload() {
 	local binary_dir
 	local systemd_unit_path
 	binary_dir="$(dirname "${APPLIANCE_IMAGE_BINARY_INSTALL_PATH}")"
-	systemd_unit_path="${SDCARD}/lib/systemd/system/${APPLIANCE_IMAGE_SERVICE_NAME}.service"
+	# /etc, not /lib: this is a locally provisioned unit, not a packaged one, and
+	# the path an application's own installer writes when it runs in the chroot.
+	systemd_unit_path="${SDCARD}/etc/systemd/system/${APPLIANCE_IMAGE_SERVICE_NAME}.service"
 	run_host_command_logged mkdir -pv "${SDCARD}${binary_dir}"
 
 	if [[ -n "${APPLIANCE_IMAGE_BINARY_SOURCE_PATH_RESOLVED}" ]]; then
