@@ -13,6 +13,7 @@ It builds on `appliance-image` and preconfigures:
 - HTTP on port 80
 - avahi service for `quark.local`
 - `ffmpeg` and `ffprobe`, which Quark shells out to for video thumbnails and transcoding
+- `dcraw` and `exiftool`, which Quark uses to read RAW photo previews
 - sudoers rule needed for managed mount operations
 
 Enable it with:

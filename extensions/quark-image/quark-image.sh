@@ -26,7 +26,8 @@ function extension_prepare_config__400_quark_image_defaults() {
 	declare -g APPLIANCE_IMAGE_WORKING_DIR="/var/lib/quark"
 	declare -g APPLIANCE_IMAGE_DATA_DIR="/var/lib/quark/data"
 	declare -g APPLIANCE_IMAGE_EXTRA_DIRECTORIES="/var/lib/quark/mounts"
-	declare -g APPLIANCE_IMAGE_PACKAGES="avahi-daemon ffmpeg ufw udisks2"
+	# dcraw and exiftool: photoutil reads a RAW photo's embedded preview with them.
+	declare -g APPLIANCE_IMAGE_PACKAGES="avahi-daemon dcraw ffmpeg libimage-exiftool-perl ufw udisks2"
 	declare -g APPLIANCE_IMAGE_SYSTEMD_ENVIRONMENT="PORT=${QUARK_IMAGE_PORT} GIN_MODE=release"
 	declare -g APPLIANCE_IMAGE_SYSTEMD_STANDARD_OUTPUT="append:/var/log/quark.app"
 	declare -g APPLIANCE_IMAGE_SYSTEMD_STANDARD_ERROR="append:/var/log/quark.err"
