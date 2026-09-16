@@ -124,7 +124,9 @@ runs:
 
     - shell: bash
       env:
-        GH_TOKEN: ${{ inputs.armbian_token }}
+        # The armbian_token input this used to read was dropped when the action
+        # was trimmed for autobutler, leaving GH_TOKEN empty and `gh api` exiting 4.
+        GH_TOKEN: ${{ github.token }}
       run: |
 
         # Resolve base version (prefer workflow input if provided)
