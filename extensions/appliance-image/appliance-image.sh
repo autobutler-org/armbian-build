@@ -318,6 +318,11 @@ function post_customize_image__appliance_image_provision() {
 
 	if [[ "${APPLIANCE_IMAGE_ENABLE_SSH}" == "yes" ]]; then
 		chroot_sdcard "systemctl --no-reload enable ssh.service"
+	else
+		# openssh-server's postinst enables sshd. Installed some other way
+		# (a package list, the base image), it still stays off unless asked for.
+		chroot_sdcard "systemctl --no-reload disable ssh.service >/dev/null 2>&1 || true"
+		chroot_sdcard "systemctl --no-reload disable ssh.socket >/dev/null 2>&1 || true"
 	fi
 
 	if [[ "${APPLIANCE_IMAGE_ENABLE_UFW}" == "yes" ]]; then
