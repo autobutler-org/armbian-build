@@ -8,13 +8,16 @@ It builds on `appliance-image` and preconfigures:
 - service account and login account `quark`
 - data directory `/var/lib/quark/data`
 - HTTPS on port 443, the only port the firewall opens
+- `openssh-server`, installed but off: sshd is disabled and port 22 stays closed until an admin turns SSH access on
+  in Quark's settings
 - avahi service `_https._tcp` for `quark.local`
 - `ffmpeg` and `ffprobe`, which Quark shells out to for video thumbnails and transcoding
 - `dcraw` and `exiftool`, which Quark uses to read RAW photo previews
 
 The rest is done by running `quark install` inside the image, exactly as on any other host: the binary in
 `/opt/quark/bin` (symlinked from `/usr/local/bin/quark`) so the service can update itself, the systemd service
-`quark.service`, and the sudoers rule for managed mounts.
+`quark.service`, the sudoers rules for managed mounts and SSH access, the root-owned SSH access helper in
+`/usr/local/libexec/quark`, and the sshd drop-in that refuses root and lets only `quark` sign in.
 
 Enable it with:
 
@@ -28,4 +31,5 @@ Optional settings:
 - `QUARK_IMAGE_LOGIN_PASSWORD`
 - `QUARK_IMAGE_LOGIN_USER`
 - `QUARK_IMAGE_HOSTNAME`
-- `QUARK_IMAGE_ENABLE_SSH=yes`
+- `QUARK_IMAGE_ENABLE_SSH=yes`, for development builds: sshd starts on first boot and the firewall opens `22/tcp`.
+  Settings can still turn it off.
