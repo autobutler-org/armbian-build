@@ -55,29 +55,3 @@ function post_customize_image__600_quark_image_install() {
 	display_alert "Extension: ${EXTENSION}" "running quark install in the image" "info"
 	chroot_sdcard "/usr/local/bin/quark install"
 }
-
-# The app browses _quark._tcp, which only a Quark answers; _https._tcp stays
-# for browsers and other generic clients. The version is read from the
-# installed binary because a build without IMAGE_VERSION embeds whatever
-# release was latest. It is the version the image shipped with: nothing
-# rewrites it when Quark updates itself, so a client treats it as a hint.
-function post_customize_image__610_quark_image_dns_sd() {
-	local quark_version
-	quark_version="$(chroot_sdcard_with_stdout /usr/local/bin/quark version)"
-	quark_version="${quark_version%% *}"
-	[[ -n "${quark_version}" ]] || exit_with_error "Extension: ${EXTENSION}: quark version printed nothing"
-
-	display_alert "Extension: ${EXTENSION}" "advertising _quark._tcp for Quark ${quark_version}" "info"
-	cat <<- QUARK_IMAGE_AVAHI_XML > "${SDCARD}/etc/avahi/services/quark-dns-sd.service"
-		<?xml version="1.0" standalone='no'?>
-		<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-		<service-group>
-		  <name replace-wildcards="yes">${APPLIANCE_IMAGE_AVAHI_SERVICE_NAME}</name>
-		  <service>
-		    <type>_quark._tcp</type>
-		    <port>${APPLIANCE_IMAGE_AVAHI_SERVICE_PORT}</port>
-		    <txt-record>version=${quark_version}</txt-record>
-		  </service>
-		</service-group>
-	QUARK_IMAGE_AVAHI_XML
-}
