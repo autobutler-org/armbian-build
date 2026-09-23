@@ -11,6 +11,9 @@ It builds on `appliance-image` and preconfigures:
 - `openssh-server`, installed but off: sshd is disabled and port 22 stays closed until an admin turns SSH access on
   in Quark's settings
 - avahi service `_https._tcp` for `quark.local`
+- avahi service `_quark._tcp` on 443, named "Quark on <hostname>", for the Quark app to browse. Its TXT record
+  `version` is the Quark version the image was built with, read from the embedded binary; it is not rewritten when
+  Quark updates itself
 - `ffmpeg` and `ffprobe`, which Quark shells out to for video thumbnails and transcoding
 - `dcraw` and `exiftool`, which Quark uses to read RAW photo previews
 
