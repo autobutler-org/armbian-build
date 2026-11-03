@@ -33,7 +33,7 @@ function extension_prepare_config__400_quark_image_defaults() {
 	# dcraw and exiftool: photoutil reads a RAW photo's embedded preview with them.
 	# openssh-server is always installed but left off: an admin turns SSH access
 	# on and off from Quark's settings, which starts sshd and opens 22/tcp.
-	declare -g APPLIANCE_IMAGE_PACKAGES="avahi-daemon dcraw ffmpeg libimage-exiftool-perl openssh-server ufw udisks2"
+	declare -g APPLIANCE_IMAGE_PACKAGES="avahi-daemon dcraw libimage-exiftool-perl openssh-server ufw udisks2"
 	# The unit `quark install` writes has no QUARK_INSECURE, so `quark serve`
 	# serves TLS on HTTPS_PORT=443 and nothing listens on 80.
 	declare -g APPLIANCE_IMAGE_AVAHI_SERVICE_NAME="Quark on %h"
