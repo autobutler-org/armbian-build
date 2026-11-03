@@ -11,8 +11,8 @@ It builds on `appliance-image` and preconfigures:
 - `openssh-server`, installed but off: sshd is disabled and port 22 stays closed until an admin turns SSH access on
   in Quark's settings
 - avahi service `_https._tcp` for `quark.local`
-- `ffmpeg` and `ffprobe`, which Quark shells out to for video thumbnails and transcoding
-- `dcraw` and `exiftool`, which Quark uses to read RAW photo previews
+- `dcraw` and `exiftool`, which Quark uses to read RAW photo previews. There is no `ffmpeg`: Quark handles video
+  in pure Go and leaves the codecs it cannot decode to its clients (autobutler-org/quark#2382)
 
 The rest is done by running `quark install` inside the image, exactly as on any other host: the binary in
 `/opt/quark/bin` (symlinked from `/usr/local/bin/quark`) so the service can update itself, the systemd service
